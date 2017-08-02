@@ -1,10 +1,10 @@
 {
-  "name": "it",
+  "name": "tester",
   "version": "1.0.0",
   "description": "",
-  "main": "it.js",
+  "main": "tester.js",
   "scripts": {
-    "test": "./tester tests.js"
+    "test": "./bin/tester tests/sample_tests.js"
   },
   "author": "",
   "license": "ISC",

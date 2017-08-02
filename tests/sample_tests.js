@@ -1,4 +1,4 @@
-const {describe, it, run} = require('./it')
+const {describe, it, run} = require('../tester')
 const {expect} = require('chai')
 
 describe('hamster', function () {
