@@ -1,5 +1,6 @@
 const Promise = require('bluebird')
-const chalk = require('chalk')
+const Test = require('./test')
+const TestGroup = require('./test_group')
 
 const testGroups = []
 
@@ -9,65 +10,18 @@ function describe (name, fn) {
   fn()
 }
 
-function TestGroup (name, fn) {
-  this.name = name
-  this.fn = fn
-  this.tests = []
-}
-
-TestGroup.prototype.testCount = function () {
-  return this.tests.length
-}
-
-TestGroup.prototype.failureCount = function () {
-  return this.tests
-    .filter(_ => _.state === 'failed')
-    .length
-}
-
 function it (name, fn) {
   const test = new Test(name, fn)
   testGroups[testGroups.length - 1].tests.push(test)
 }
 
-function Test (name, fn) {
-  this.name = name
-  this.fn = fn
-}
-
-Test.prototype.run = function() {
-  return new Promise((resolve, reject) => {
-    try {
-      const done = () => {
-        this.state = 'passed'
-        resolve(this)
-      }
-      this.fn(done)
-    } catch(err) {
-      this.state = 'failed'
-      this.failureMsg = err.message
-      resolve(this)
-    }
-  })
-}
-
-Test.prototype.toString = function() {
-  let msg = `it ${this.name}`
-  if (this.state === 'failed') {
-    msg = chalk.red(msg + ' -- ' + this.failureMsg)
-  } else {
-    msg = chalk.green(msg)
-  }
-  return msg
-}
-
 function run () {
   Promise.mapSeries(testGroups, group => {
     console.log('Describe', group.name)
-    const promises = group.tests.map(test => test.run())
-    return Promise.mapSeries(promises, test => {
-      console.log('  ' + test.toString())
-    }).then(() => {
+    return Promise.mapSeries(
+      group.tests,
+      test => test.run().then(() => console.log('  ' + test.toString()))
+    ).then(() => {
       console.log('')
     })
   })

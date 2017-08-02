@@ -13,9 +13,17 @@ describe('dog', function () {
   })
 
   it('flies', function (done) {
-    expect(4).to.eq('cheese')
-    done()
+    setTimeout(function () {
+      expect(4).to.eq('cheese')
+      done()
+    }, 100)
   })
-})
 
-run()
+  it('times out after 2 seconds', function (done) {
+    setTimeout(function () {
+      expect(4).to.eq(4)
+      done()
+    }, 100000)
+  })
+
+})

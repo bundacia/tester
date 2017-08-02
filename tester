@@ -1,0 +1,11 @@
+#!/Users/trevor/.nvm/versions/node/v6.11.1/bin/node
+
+const {run} = require('./it')
+const path = require('path')
+
+const fileName = process.argv[2]
+const absFilePath = path.resolve(fileName)
+
+require(absFilePath)
+
+run()
